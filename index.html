@@ -191,7 +191,7 @@
     var phoneInput = document.getElementById('leadPhone');
     var status = document.getElementById('formStatus');
 
-    var FORM_ENDPOINT = '';
+    var FORM_ENDPOINT = 'https://formsubmit.co/ajax/departure.aviator@gmail.com';
 
     if (!form || !nameInput || !phoneInput || !status) {
       return;
@@ -241,18 +241,21 @@
 
       setStatus('Отправляем заявку...', 'pending');
 
+      var formData = new FormData();
+      formData.append('name', name);
+      formData.append('phone', phone);
+      formData.append('_subject', 'Новая заявка с сайта АВИАТОР');
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      formData.append('source', 'aviator.aateam.ru');
+      formData.append('page', window.location.href);
+
       fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({
-          name: name,
-          phone: phone,
-          source: 'aviator.aateam.ru',
-          page: window.location.href
-        })
+        body: formData
       })
       .then(function (response) {
         if (!response.ok) {
